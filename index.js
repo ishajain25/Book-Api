@@ -272,4 +272,116 @@ shapeAI.put("/publication/update/book/:isbn" , (req, res) => {
     });
 });
 
+/*
+ Route               /book/delete
+ Description         delete a book
+ Access              Public
+ Parameters          isbn
+ Method              DELETE
+*/
+
+shapeAI.delete("/book/delete/:isbn" , (req, res) => {
+    const updatedBookDatabase = database.books.filter(
+        (book) => book.ISBN !== req.params.isbn
+    );
+
+    database.books = updatedBookDatabase;
+
+    return res.json({books: database.books});
+});
+
+/*
+ Route               /book/delete/author
+ Description         delete an author from a book 
+ Access              Public
+ Parameters          isbn, author id
+ Method              DELETE
+*/
+
+shapeAI.delete("/book/delete/author/:isbn/:authorId" , (req, res) => {
+    
+    //update book database
+    database.books.forEach((book) => {
+        if(book.ISBN === req.params.isbn) {
+            const newAuthorList = book.authors.filter(
+                (author) => author !== parseInt(req.params.authorId)
+            );
+            book.authors = newAuthorList;
+            return;
+        }
+    });
+
+    // update the author database
+    database.authors.forEach((author) => {
+        if(author.id === parseInt(req.params.authorId)) {
+            const newBooksList = author.books.filter(
+                (book) => book !== req.params.isbn
+            );
+
+            author.books = newBooksList;
+            return;
+        }
+    });
+
+    return res.json({
+        book: database.books,
+        author: database.authors,
+        message: "author was deleted"
+    })
+});
+
+
+
 shapeAI.listen(3000, () => console.log("Server running!😎"));
+
+/*
+ Route               /publication/delete/book
+ Description         delete a book from publication
+ Access              Public
+ Parameters          isbn, publication id
+ Method              DELETE
+*/
+
+shapeAI.delete("/publication/delete/book/:isbn/:pubId" , (req, res) => {
+    //update publication database
+    database.publications.forEach((publication) => {
+        if(publication.id === parseInt(req.params.pubId)) {
+            const newBooksList = publication.books.filter(
+                (book) => book !== req.params.isbn
+            )
+
+            publication.books = newBooksList;
+            return;
+        }
+    })
+
+    //update book database
+    database.books.forEach((book) => {
+        if(book.ISBN === req.params.isbn) {
+            book.publication = 0; //no publication available
+            return;
+        }
+    })
+
+    return res.json({
+        
+        message: "book from publication deleted",
+        books: database.books,
+        publications: database.publications
+    })
+})
+
+
+
+
+
+
+// doubts ----- 
+
+// 1. when to use body and params with req.
+// 2. what is tradeoff
+// 3. how to know when we r using isbn or ISBN
+// 4. how to know when to return directly and when to return empty 
+// and why not either of them in all cases
+// semicolons- are they a part of syntax like is it a good practice
+// 5. in line 318 why did we remove book.ISBN

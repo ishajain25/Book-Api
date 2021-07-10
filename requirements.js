@@ -33,8 +33,8 @@
 //Update add new author ✅
 
 //DELETE
-//Delete a book
-//delete an author from a book
+//Delete a book ✅
+//delete an author from a book ✅
 
 //--------------------------------------------------------------------
 
@@ -62,6 +62,11 @@
 
 //We need an API
 
+//GET
+//to get all publications ✅
+//to get specific publication 
+//to get a list of publications based on a book
+
 //POST
 //New publication 
 
@@ -70,10 +75,5 @@
 //Update new book to a publication ✅ 
 
 //DELETE
-//Delete a publication
-//Delete a book from publication
-
-//GET
-//to get all publications ✅
-//to get specific publication ✔
-//to get a list of publications based on a book ✔
+//Delete a publication 
+//Delete a book from publication ✅
