@@ -2,7 +2,7 @@ const books = [
 {
     ISBN: "12345ONE",
     title: "Getting started with MERN",
-    authors: [1 , 3],
+    authors: [1 ,2 ],
     language: "en",
     pubDate: "2021-07-07",
     numOfPage: 225,
@@ -41,6 +41,11 @@ const publications = [
     id: 1,
     name: "Chakra",
     books: ["12345ONE"]
+},
+{
+    id: 2,
+    name: "Hp",
+    books: []
 }
 ];
 
