@@ -111,7 +111,7 @@ shapeAI.get("/au/:id", (req, res) => {
 });    
 
 /*
- Route               /author/
+ Route               /author
  Description         To get a list of authors based on a book
  Access              Public
  Parameters          isbn
@@ -140,6 +140,44 @@ shapeAI.get("/author/:isbn", (req, res) => {
 shapeAI.get("/publications" , (req, res) => {
     return res.json({publications: database.publications});
 });
+
+/*
+ Route               /p
+ Description         To get specific publication
+ Access              Public
+ Parameters          id
+ Method              Get
+*/
+ 
+
+shapeAI.get("/p/:id", (req, res) => {
+    const getSpecificPublication = database.publications.filter((publication) => publication.id === parseInt(req.params.id)); 
+
+    if(getSpecificPublication.length === 0) {
+        return res.json({error: `No publications found with Id ${req.params.id}`});
+    }
+
+        return res.json({publications: getSpecificPublication });
+
+});
+
+/*
+ Route               /publications
+ Description         to get a list of publications based on a book
+ Access              Public
+ Parameters          isbn
+ Method              Get
+*/
+
+shapeAI.get("/publications/:isbn", (req,res) => {
+    const getSpecificPublications = database.publications.filter((publication) => publication.books.includes(req.params.isbn))
+
+    if(getSpecificPublications.length === 0) {
+        return res.json({error: `No publication found with book ${req.params.isbn}`});
+    }
+
+        return res.json({publication: getSpecificPublications});
+})
 
 /*
  Route               /book/new
@@ -173,6 +211,23 @@ shapeAI.post("/author/new", (req, res) => {
     database.authors.push(newAuthor);
 
     return res.json({books: database.authors, message: "Author was added!"});
+});
+
+/*
+ Route               /p/new
+ Description         To add new publication
+ Access              Public
+ Parameters          None
+ Method              POST
+*/
+
+shapeAI.post("/p/new", (req, res) => {
+    //body
+    const { newPublication } = req.body;
+
+    database.publications.push(newPublication);
+
+    return res.json({books: database.publications, message: "Publication was added!"});
 });
 
 /*
@@ -240,6 +295,25 @@ shapeAI.put("/author/name/:id" , (req, res) => {
 
     return res.json({ authors: database.authors });
 });
+
+/*
+ Route               /publication/name
+ Description         To update publication name
+ Access              Public
+ Parameters          id
+ Method              PUT
+*/
+
+shapeAI.put("/publication/name/:id", (req, res) => {
+    database.publications.forEach((publication) => {
+        if(publication.id === parseInt(req.params.id)) {
+            publication.name = req.body.publicationName;
+            return;
+        }
+    })
+
+    return res.json({ publications: database.publications})
+})
 
 /*
  Route               /publication/update/book
@@ -330,9 +404,23 @@ shapeAI.delete("/book/delete/author/:isbn/:authorId" , (req, res) => {
     })
 });
 
+/*
+ Route               /author/delete
+ Description         delete an author
+ Access              Public
+ Parameters          id
+ Method              DELETE
+*/
 
+shapeAI.delete("/author/delete/:id" , (req, res) => {
+    const updatedAuthorDatabase = database.authors.filter(
+        (author) => author.id !== parseInt(req.params.id)
+    );
 
-shapeAI.listen(3000, () => console.log("Server running!😎"));
+    database.authors = updatedAuthorDatabase;
+
+    return res.json({authors: database.authors});
+});
 
 /*
  Route               /publication/delete/book
@@ -372,16 +460,9 @@ shapeAI.delete("/publication/delete/book/:isbn/:pubId" , (req, res) => {
 })
 
 
+shapeAI.listen(3000, () => console.log("Server running!😎"));
 
 
 
 
-// doubts ----- 
 
-// 1. when to use body and params with req.
-// 2. what is tradeoff
-// 3. how to know when we r using isbn or ISBN
-// 4. how to know when to return directly and when to return empty 
-// and why not either of them in all cases
-// semicolons- are they a part of syntax like is it a good practice
-// 5. in line 318 why did we remove book.ISBN

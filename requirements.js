@@ -64,14 +64,14 @@
 
 //GET
 //to get all publications ✅
-//to get specific publication 
-//to get a list of publications based on a book
+//to get specific publication ✅
+//to get a list of publications based on a book ✅
 
 //POST
-//New publication 
+//New publication ✅
 
 //PUT
-//Update publication details
+//Update publication details ✅
 //Update new book to a publication ✅ 
 
 //DELETE
