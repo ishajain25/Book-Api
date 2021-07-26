@@ -21,6 +21,17 @@ let books = [
     publication: 1,
 },
 
+{
+    ISBN: "12345NEW",
+    title: "Getting started with HTML",
+    authors: [ 1],
+    language: "en",
+    pubDate: "2021-07-07",
+    numOfPage: 2000,
+    category: ["fiction","programming","tech","web dev"],
+    publication: 1,
+},
+
 ];
 
 const authors = [
